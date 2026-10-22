@@ -1,4 +1,24 @@
-# LiemFinance - Personal Expense Tracker
+<div align="center">
+
+  <img src="web/LiemFinance.ico" alt="LiemFinance Logo" width="100" height="100" />
+
+  # 💰 LiemFinance - Personal Expense Tracker
+
+  **Ứng dụng Quản lý Tài chính Cá nhân Tối giản, Siêu nhẹ & Hiệu quả**
+
+  [![Python Version](https://img.shields.io/badge/Python-3.8%2B-80121D?style=for-the-badge&logo=python&logoColor=F2B236)](https://www.python.org/)
+  [![Platform](https://img.shields.io/badge/Platform-Windows-80121D?style=for-the-badge&logo=windows&logoColor=F2B236)](#)
+  [![License](https://img.shields.io/badge/License-MIT-80121D?style=for-the-badge&logo=open-source-initiative&logoColor=F2B236)](LICENSE)
+  [![UI Design](https://img.shields.io/badge/UI-Burgundy%20%26%20Amber-F2B236?style=for-the-badge&labelColor=80121D)](#)
+
+  <p align="center">
+    <a href="#-tính-năng-nổi-bật">Tính năng</a> •
+    <a href="#-hướng-dẫn-chạy-ứng-dụng">Cách sử dụng</a> •
+    <a href="#-đóng-gói-exe">Đóng gói .EXE</a> •
+    <a href="#-cấu-trúc-dự-án">Cấu trúc</a>
+  </p>
+
+</div>
 
 > **Quản lý tài chính cá nhân gọn nhẹ, rõ ràng và luôn trong tầm kiểm soát.**
 

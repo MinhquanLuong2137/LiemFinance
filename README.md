@@ -199,3 +199,20 @@ cá nhân vào Git.
   `--add-data ".\web;web"` như hướng dẫn ở trên.
 - **Dừng server:** dùng nút “Tắt ứng dụng” trên giao diện hoặc chạy
   `Stop_LiemFinance.bat` khi server được khởi chạy bằng Python từ mã nguồn.
+
+
+---
+
+<div align="center">
+
+### 🛡️ LiemFinance
+
+Được phát triển với sự hỗ trợ của **GitHub Copilot Agent** • Tối ưu hoá cho Windows OS
+
+[📄 Xem Giấy phép (LICENSE)](LICENSE) • [🐛 Báo lỗi / Góp ý](https://github.com/) • [⭐ Trở về đầu trang](#-liemfinance---personal-expense-tracker)
+
+<p align="center">
+  <i>© 2026 LiemFinance. All rights reserved.</i>
+</p>
+
+</div>

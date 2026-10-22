@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#80121d">
+  <title>LiemFinance — Quản lý tài chính</title>
+  <link rel="icon" href="LiemFinance.ico">
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="LiemFinance trang chủ" data-i18n-aria-label="brandHome">
+      <img src="LiemFinance.ico" alt="" width="42" height="42">
+      <span class="brand-copy"><strong>LiemFinance</strong><small>PERSONAL FINANCE</small></span>
+    </a>
+    <div class="topbar-right">
+      <div class="header-controls">
+        <button id="theme-toggle" class="header-toggle" type="button" aria-pressed="false" aria-label="Chuyển sang giao diện tối">
+          <span class="theme-toggle-icon" aria-hidden="true">☾</span>
+          <span id="theme-toggle-label">Tối</span>
+        </button>
+        <button id="language-toggle" class="header-toggle language-toggle" type="button" aria-label="Switch language to English">
+          <span id="language-toggle-label">EN</span>
+        </button>
+        <button id="shutdown-button" class="header-toggle shutdown-toggle" type="button" data-i18n-aria-label="shutdown" aria-label="Tắt ứng dụng">
+          <span aria-hidden="true">⏻</span>
+          <span data-i18n="exit">Thoát</span>
+        </button>
+      </div>
+      <span class="secure-label"><span class="status-dot"></span> <span data-i18n="localData">Dữ liệu lưu trên thiết bị</span></span>
+      <span class="avatar" aria-hidden="true">LF</span>
+    </div>
+  </header>
+
+  <main class="page">
+    <section class="welcome">
+      <div>
+        <p class="eyebrow" data-i18n="dashboardEyebrow">TỔNG QUAN TÀI CHÍNH</p>
+        <h1><span data-i18n="welcomeTitle">Chào bạn</span> <span aria-hidden="true">✦</span></h1>
+        <p class="welcome-copy" data-i18n="welcomeCopy">Quản lý tài chính, quản lý tương lai.</p>
+      </div>
+      <div class="welcome-actions">
+        <span id="today-label" class="today-label"></span>
+        <button id="refresh-button" class="button button-quiet" type="button" data-i18n-aria-label="refresh" aria-label="Làm mới dữ liệu">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 7v5h-5M4 17v-5h5m-4.1-3a8 8 0 0 1 13.2-2L20 12M4 12l1.9 5a8 8 0 0 0 13.2-2"/></svg>
+          <span data-i18n="refresh">Làm mới</span>
+        </button>
+      </div>
+    </section>
+
+    <section class="stats-grid" aria-label="Tổng quan thu chi" data-i18n-aria-label="overview">
+      <article class="stat-card">
+        <div class="stat-top"><span class="stat-label" data-i18n="totalIncome">Tổng thu nhập</span><span class="stat-icon income-icon">↗</span></div>
+        <p id="total-income" class="stat-value">—</p>
+        <p class="stat-foot"><span class="trend-up">●</span> <span data-i18n="allIncome">Tổng các khoản thu</span></p>
+      </article>
+      <article class="stat-card">
+        <div class="stat-top"><span class="stat-label" data-i18n="totalExpense">Tổng chi tiêu</span><span class="stat-icon expense-icon">↘</span></div>
+        <p id="total-expense" class="stat-value">—</p>
+        <p class="stat-foot"><span class="trend-down">●</span> <span data-i18n="allExpense">Tổng các khoản chi</span></p>
+      </article>
+      <article class="stat-card balance-card">
+        <div class="stat-top"><span class="stat-label" data-i18n="balance">Số dư còn lại</span><span class="stat-icon balance-icon">₫</span></div>
+        <p id="total-balance" class="stat-value">—</p>
+        <p id="balance-caption" class="stat-foot" data-i18n="balanceCaption">Thu nhập trừ chi tiêu</p>
+      </article>
+    </section>
+
+    <section class="panel report-panel" aria-labelledby="report-title">
+      <div class="panel-heading">
+        <div><p class="eyebrow" data-i18n="reportEyebrow">BÁO CÁO THU / CHI</p><h2 id="report-title" data-i18n="reportTitle">Tổng hợp theo thời gian</h2></div>
+        <span class="period-chip" data-i18n="autoUpdated">Cập nhật tự động</span>
+      </div>
+      <div id="period-reports" class="period-reports" aria-live="polite">
+        <p class="report-loading" data-i18n="loadingReport">Đang tải báo cáo...</p>
+      </div>
+    </section>
+
+    <section class="insights-grid" aria-label="Thống kê trực quan" data-i18n-aria-label="visualStats">
+      <article class="panel trend-panel">
+        <div class="panel-heading">
+          <div><p class="eyebrow" data-i18n="dailyCashFlow">DÒNG TIỀN HẰNG NGÀY</p><h2 data-i18n="chartTitle">Thu chi trong 30 ngày gần nhất</h2></div>
+          <label class="chart-period-control">
+            <span data-i18n="chartPeriod">Gom theo</span>
+            <select id="chart-period-filter" class="filter-select" aria-label="Khoảng thời gian biểu đồ" data-i18n-aria-label="chartPeriod">
+              <option value="day" data-i18n="chartDaily">Theo ngày · 30 ngày</option>
+              <option value="week" data-i18n="chartWeekly">Theo tuần · 12 tuần</option>
+              <option value="month" data-i18n="chartMonthly">Theo tháng · 12 tháng</option>
+              <option value="year" data-i18n="chartYearly">Theo năm</option>
+              <option value="all" data-i18n="chartAll">Tất cả</option>
+            </select>
+          </label>
+        </div>
+        <div class="chart-legend">
+          <span><i class="legend-dot income-dot"></i> <span data-i18n="income">Thu nhập</span></span>
+          <span><i class="legend-dot expense-dot"></i> <span data-i18n="expense">Chi tiêu</span></span>
+        </div>
+        <div class="horizontal-chart-shell">
+          <div id="horizontal-chart" class="horizontal-chart" role="img" aria-label="Biểu đồ cột ngang thu chi theo ngày trong 30 ngày gần nhất" data-i18n-aria-label="chartAria"></div>
+          <div id="chart-axis" class="chart-axis" aria-hidden="true"></div>
+        </div>
+      </article>
+      <article class="panel composition-panel">
+        <div class="panel-heading">
+          <div><p class="eyebrow" data-i18n="allocation">PHÂN BỔ</p><h2 data-i18n="cashFlowComposition">Cơ cấu dòng tiền</h2></div>
+        </div>
+        <div class="composition">
+          <div id="money-donut" class="money-donut"><div class="donut-center"><strong id="donut-total">—</strong><span data-i18n="transactions">Tổng giao dịch</span></div></div>
+          <div id="composition-legend" class="composition-legend"></div>
+        </div>
+        <p id="transaction-count" class="composition-foot"></p>
+      </article>
+    </section>
+
+    <section class="workspace-grid">
+      <article class="panel form-panel">
+        <div class="panel-heading">
+          <div><p class="eyebrow" data-i18n="record">GHI NHẬN</p><h2 id="form-title" data-i18n="addTransaction">Thêm giao dịch</h2></div>
+          <span class="form-mark">＋</span>
+        </div>
+        <form id="transaction-form">
+          <div class="type-switch" role="group" aria-label="Loại giao dịch" data-i18n-aria-label="transactionType">
+            <button class="type-button is-active" type="button" data-type="expense" data-i18n="expense">Chi tiêu</button>
+            <button class="type-button" type="button" data-type="income" data-i18n="income">Thu nhập</button>
+          </div>
+          <input id="transaction-type" type="hidden" value="expense">
+          <label class="field-label" for="amount" data-i18n="amount">Số tiền</label>
+          <div class="amount-field"><input id="amount" name="amount" type="number" min="1" step="any" placeholder="0" required><span>₫ VND</span></div>
+          <label class="field-label" for="name" data-i18n="transactionName">Tên giao dịch</label>
+          <input class="text-field" id="name" name="name" type="text" maxlength="120" placeholder="Ví dụ: Ăn uống, Lương..." data-i18n-placeholder="namePlaceholder" required>
+          <div class="form-row">
+            <div><label class="field-label" for="date" data-i18n="transactionDate">Ngày giao dịch</label><input class="text-field" id="date" name="date" type="date" required></div>
+            <div><label class="field-label" for="note"><span data-i18n="note">Ghi chú</span> <span class="optional" data-i18n="optional">(không bắt buộc)</span></label><input class="text-field" id="note" name="note" type="text" maxlength="300" placeholder="Thêm ghi chú..." data-i18n-placeholder="notePlaceholder"></div>
+          </div>
+          <div class="form-actions">
+            <button id="cancel-edit" class="button button-quiet hidden" type="button" data-i18n="cancelEdit">Hủy sửa</button>
+            <button id="submit-button" class="button button-primary" type="submit"><span data-i18n="saveTransaction">Lưu giao dịch</span> <span aria-hidden="true">→</span></button>
+          </div>
+        </form>
+      </article>
+
+      <article class="panel history-panel">
+        <div class="panel-heading history-heading">
+          <div><p class="eyebrow" data-i18n="ledger">SỔ GIAO DỊCH</p><h2 data-i18n="history">Lịch sử giao dịch</h2></div>
+          <span id="history-count" class="count-chip">0 giao dịch</span>
+        </div>
+        <div class="table-tools">
+          <label class="search-field">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4 4"/></svg>
+            <input id="search" type="search" placeholder="Tìm giao dịch..." aria-label="Tìm giao dịch" data-i18n-placeholder="searchPlaceholder" data-i18n-aria-label="searchPlaceholder">
+          </label>
+          <select id="type-filter" class="filter-select" aria-label="Lọc theo loại" data-i18n-aria-label="filterType">
+            <option value="all" data-i18n="allTypes">Tất cả loại</option><option value="income" data-i18n="income">Thu nhập</option><option value="expense" data-i18n="expense">Chi tiêu</option>
+          </select>
+        </div>
+        <div class="list-controls">
+          <div class="filter-group">
+            <label class="control-label" for="period-filter" data-i18n="time">Thời gian</label>
+            <select id="period-filter" class="filter-select">
+              <option value="all" data-i18n="allTime">Toàn bộ thời gian</option>
+              <option value="day" data-i18n="specificDay">Ngày cụ thể</option>
+              <option value="week" data-i18n="currentWeek">Tuần hiện tại</option>
+              <option value="month" data-i18n="currentMonth">Tháng hiện tại</option>
+              <option value="custom" data-i18n="customRange">Khoảng tùy chọn</option>
+            </select>
+          </div>
+          <div id="day-filter-field" class="filter-group hidden">
+            <label class="control-label" for="specific-date" data-i18n="date">Ngày</label>
+            <input id="specific-date" class="filter-select date-filter" type="date">
+          </div>
+          <div id="custom-range-fields" class="filter-group custom-range hidden">
+            <label class="control-label" for="date-from" data-i18n="fromDate">Từ ngày</label>
+            <input id="date-from" class="filter-select date-filter" type="date">
+            <label class="control-label" for="date-to" data-i18n="toDate">Đến</label>
+            <input id="date-to" class="filter-select date-filter" type="date">
+          </div>
+          <div class="filter-group sort-group">
+            <label class="control-label" for="sort-filter" data-i18n="sort">Sắp xếp</label>
+            <select id="sort-filter" class="filter-select">
+              <option value="date_desc" data-i18n="newestFirst">Ngày mới nhất</option>
+              <option value="amount_asc" data-i18n="amountAscending">Số tiền tăng dần</option>
+              <option value="amount_desc" data-i18n="amountDescending">Số tiền giảm dần</option>
+              <option value="top_spending" data-i18n="topSpending">Top chi tiêu (mọi thời điểm)</option>
+            </select>
+          </div>
+        </div>
+        <div class="accordion-tools">
+          <label class="details-toggle"><input id="show-items" type="checkbox"> <span data-i18n="showItemDetails">Hiển thị chi tiết món hàng</span></label>
+          <div id="top-period-control" class="filter-group top-period-control hidden">
+            <label class="control-label" for="top-period-filter" data-i18n="topPeriod">Thời gian Top</label>
+            <select id="top-period-filter" class="filter-select">
+              <option value="today" data-i18n="today">Hôm nay</option>
+              <option value="this_week" data-i18n="thisWeek">Tuần này</option>
+              <option value="this_month" data-i18n="thisMonth">Tháng này</option>
+              <option value="this_year" data-i18n="thisYear">Năm nay</option>
+              <option value="all" data-i18n="allTime">Toàn bộ thời gian</option>
+            </select>
+          </div>
+          <div class="accordion-actions">
+            <button id="expand-all" class="text-button" type="button" data-i18n="expandAll">Mở rộng tất cả</button>
+            <span aria-hidden="true">·</span>
+            <button id="collapse-all" class="text-button" type="button" data-i18n="collapseAll">Thu gọn tất cả</button>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th data-i18n="transactionCategory">Giao dịch / Hạng mục</th><th data-i18n="date">Ngày</th><th data-i18n="type">Loại</th><th class="amount-column" data-i18n="amount">Số tiền</th><th><span class="visually-hidden" data-i18n="actions">Thao tác</span></th></tr></thead>
+            <tbody id="transaction-list"></tbody>
+          </table>
+          <div id="empty-state" class="empty-state hidden"><span>◌</span><strong data-i18n="noTransactions">Chưa có giao dịch phù hợp</strong><p data-i18n="adjustFilters">Thử thay đổi bộ lọc hoặc thêm giao dịch mới.</p></div>
+        </div>
+        <div class="show-more-wrap">
+          <button id="show-more-button" class="button button-quiet show-more-button hidden" type="button"></button>
+        </div>
+      </article>
+    </section>
+    <footer class="footer-note"><span class="status-dot"></span> <span data-i18n="localStorageNote">Giao dịch được lưu cục bộ trong</span> <code>expenses.json</code></footer>
+  </main>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+</body>
+</html>

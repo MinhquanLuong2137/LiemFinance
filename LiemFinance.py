@@ -1,76 +1,8 @@
 """
 ================================================================================
-LIEMFINANCE - HƯỚNG DẪN DÀNH CHO AI DUY TRÌ & PHÁT TRIỂN CODE (AI CONTEXT)
-================================================================================
-
-1. CẤU TRÚC DỰ ÁN & CÁCH CHẠY:
-   - `LiemFinance.py` chứa nghiệp vụ, CLI, HTTP server và API; `expenses.json` nằm cạnh file này.
-   - Frontend thuần HTML/CSS/JS và icon nằm trong `web/`:
-     `web/index.html`, `web/styles.css`, `web/app.js`, `web/LiemFinance.ico`.
-   - Chạy Web UI mặc định bằng `python LiemFinance.py`; dùng `--port` để đổi cổng,
-     `--no-browser` để không tự mở trình duyệt, hoặc `--cli` để dùng CLI.
-     Nếu cổng yêu cầu đã được sử dụng, Web UI tự chọn cổng khả dụng khác và in URL thực tế.
-   - Web server chỉ bind vào `127.0.0.1`; không thêm thư viện Python/JavaScript bên thứ ba.
-
-2. TƯƠNG THÍCH DỮ LIỆU & SCHEMA - BẮT BUỘC:
-   - `expenses.json` là danh sách các giao dịch, phải tiếp tục đọc được dữ liệu cũ.
-   - Không đổi tên hoặc xóa các trường cốt lõi:
-     `id`, `type`, `name`, `amount`, `date`, `note`.
-   - Schema lịch sử: v1.0 có `id/name/amount/date`; v1.1 thêm `note`;
-     v1.2 thêm `type` (`expense` hoặc `income`).
-   - `load_data()` bù mặc định `type="expense"` và `note=""` cho bản ghi cũ.
-     Trường mở rộng, ví dụ `items`, là tùy chọn; khi đọc phải dùng `dict.get()`.
-   - Không làm mất trường mở rộng đã có trên bản ghi khi cập nhật giao dịch.
-
-3. NGHIỆP VỤ CỐT LÕI:
-   - `strip_accents()` chuyển văn bản tiếng Việt thành không dấu, chuẩn hóa khoảng trắng
-     và Title Case; dùng nhất quán khi lưu tên và khi tìm kiếm.
-   - Chỉ chấp nhận giao dịch có tên, số tiền hữu hạn lớn hơn 0 và ngày `YYYY-MM-DD`
-     không cũ hơn `DAYS_RETENTION` (365 ngày).
-   - Tự dọn bản ghi quá hạn. CLI cảnh báo và hỏi có xuất backup hay không; Web tự tạo
-     backup JSON cạnh ứng dụng trước khi dọn. Không bỏ qua hoặc âm thầm nuốt lỗi đọc/ghi.
-   - Import chỉ nhận giao dịch hợp lệ trong giới hạn 365 ngày.
-
-4. API WEB:
-   - CRUD: `GET/POST /api/transactions` và `PUT/DELETE /api/transactions/{id}`.
-   - `GET /api/transactions` hỗ trợ `q` (tên/ghi chú, không dấu), `type`,
-     `period` (`all`, `day`, `week`, `month`, `custom`), `date`, `from`, `to`,
-     và `sort` (`date_desc`, `amount_asc`, `amount_desc`).
-   - `GET /api/transactions/top-spending` tổng hợp chi tiêu theo tên hạng mục;
-     `period` nhận `today`, `this_week`, `this_month`, `this_year` hoặc `all`.
-     Chi tiết giao dịch gốc được giữ kèm để hiển thị.
-   - `GET /api/reports/dashboard` trả tổng thu/chi theo các khoảng lăn 1, 7, 30,
-     365 ngày (tính cả hôm nay) và chuỗi tổng theo ngày của 30 ngày gần nhất.
-   - `GET /api/reports/chart?period=day|week|month|year|all` trả dữ liệu biểu đồ
-     đã gom theo ngày, tuần, tháng, năm hoặc toàn bộ lịch sử.
-   - `POST /api/shutdown` xác nhận yêu cầu tắt server; gọi `shutdown()` từ timer
-     riêng để phản hồi HTTP hoàn tất trước khi server dừng.
-   - Giữ response JSON và thông báo lỗi HTTP rõ ràng; không tin cậy đầu vào từ client.
-
-5. DASHBOARD & GIAO DIỆN:
-   - Báo cáo bốn khoảng thời gian lấy từ API dashboard; biểu đồ cột ngang lấy từ
-     `/api/reports/chart`. Không nhân đôi phép tính thống kê trong UI.
-   - Danh sách hỗ trợ tìm kiếm, lọc ngày, sắp xếp, Top chi tiêu và accordion;
-     mặc định chỉ hiện 8 dòng đầu, nút mở rộng cho phép xem toàn bộ kết quả.
-     Tùy chọn chi tiết món hàng mở ngay các giao dịch có dữ liệu mặt hàng.
-     Các trường món hàng là tùy chọn, không phải trường bắt buộc của schema cốt lõi.
-   - Giữ UI responsive, màu chủ đạo burgundy `#80121D` và amber `#F2B236`;
-     biểu đồ dùng HTML/CSS/SVG thuần, không thêm thư viện JS cồng kềnh.
-
-6. ĐÓNG GÓI:
-   - Phải tiếp tục build được PyInstaller `--onefile`, chỉ dùng thư viện chuẩn Python.
-   - `DATA_FILE` luôn nằm cạnh script/exe; tài nguyên giao diện lấy từ `web/`
-     trong source và từ bundle (`sys._MEIPASS`) trong bản đóng gói.
+=================================Mã nguồn Python================================
 ================================================================================
 """
-
-
-
-
-
-
-
-
 
 import errno
 import os

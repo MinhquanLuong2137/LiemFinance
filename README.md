@@ -85,7 +85,7 @@ LiemFinance/
 
 ### Yêu cầu
 
-- Python 3.10 trở lên.
+- Python 3.10 trở lên ( không cần nếu dùng cách 3 ).
 - Windows nếu dùng các script `.vbs`, `.bat` hoặc file `.exe`.
 - Trình duyệt web hiện đại.
 

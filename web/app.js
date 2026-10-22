@@ -470,7 +470,7 @@ function niceAxisMaximum(value) {
 }
 
 function renderHorizontalChart() {
-  const days = state.chartReport.points;
+  const days = [...state.chartReport.points].reverse();
   const chart = byId("horizontal-chart");
   const axis = byId("chart-axis");
   const chartTitles = {

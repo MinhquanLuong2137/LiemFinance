@@ -9,6 +9,7 @@ LIEMFINANCE - HƯỚNG DẪN DÀNH CHO AI DUY TRÌ & PHÁT TRIỂN CODE (AI CONT
      `web/index.html`, `web/styles.css`, `web/app.js`, `web/LiemFinance.ico`.
    - Chạy Web UI mặc định bằng `python LiemFinance.py`; dùng `--port` để đổi cổng,
      `--no-browser` để không tự mở trình duyệt, hoặc `--cli` để dùng CLI.
+     Nếu cổng yêu cầu đã được sử dụng, Web UI tự chọn cổng khả dụng khác và in URL thực tế.
    - Web server chỉ bind vào `127.0.0.1`; không thêm thư viện Python/JavaScript bên thứ ba.
 
 2. TƯƠNG THÍCH DỮ LIỆU & SCHEMA - BẮT BUỘC:
@@ -71,6 +72,7 @@ LIEMFINANCE - HƯỚNG DẪN DÀNH CHO AI DUY TRÌ & PHÁT TRIỂN CODE (AI CONT
 
 
 
+import errno
 import os
 import json
 import csv
@@ -104,6 +106,11 @@ def resource_path(relative_path):
     """Resolve bundled resources in source runs and PyInstaller onefile builds."""
     bundle_dir = getattr(sys, "_MEIPASS", APP_DIR)
     return os.path.join(bundle_dir, relative_path)
+
+
+def _console_print(message):
+    if sys.stdout is not None:
+        print(message)
 
 
 def strip_accents(text):
@@ -210,7 +217,7 @@ def prune_expired_for_web():
     ]
     save_data(active_data)
     display_path = backup_name.encode("ascii", "backslashreplace").decode("ascii")
-    print(
+    _console_print(
         f"WARNING: Saved a backup of {len(expired)} expired transactions to "
         f"{display_path} before pruning."
     )
@@ -265,6 +272,10 @@ def validate_transaction(payload, existing=None):
 
 class FinanceRequestHandler(BaseHTTPRequestHandler):
     server_version = "LiemFinance/1.0"
+
+    def log_message(self, format_string, *args):
+        if sys.stderr is not None:
+            super().log_message(format_string, *args)
 
     def _send_json(self, status, payload):
         body = json.dumps(payload, ensure_ascii=False).encode("utf-8")
@@ -618,15 +629,21 @@ class FinanceRequestHandler(BaseHTTPRequestHandler):
 
 def run_web_server(port=8765, open_browser=True):
     prune_expired_for_web()
-    server = ThreadingHTTPServer(("127.0.0.1", port), FinanceRequestHandler)
-    url = f"http://127.0.0.1:{server.server_address[1]}"
-    print(f"LiemFinance Web đang chạy tại {url} (nhấn Ctrl+C để dừng).")
-    if open_browser:
-        threading.Timer(0.8, webbrowser.open, args=(url,)).start()
     try:
+        server = ThreadingHTTPServer(("127.0.0.1", port), FinanceRequestHandler)
+    except OSError as error:
+        if error.errno not in (errno.EADDRINUSE, errno.EACCES):
+            raise
+        server = ThreadingHTTPServer(("127.0.0.1", 0), FinanceRequestHandler)
+        _console_print(f"Port {port} is already in use; using port {server.server_address[1]}.")
+    url = f"http://127.0.0.1:{server.server_address[1]}"
+    _console_print(f"LiemFinance Web is running at {url} (press Ctrl+C to stop).")
+    try:
+        if open_browser:
+            threading.Timer(0.8, webbrowser.open, args=(url,)).start()
         server.serve_forever()
     except KeyboardInterrupt:
-        print("\nĐang dừng LiemFinance Web...")
+        _console_print("\nStopping LiemFinance Web...")
     finally:
         server.server_close()
 

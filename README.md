@@ -141,6 +141,8 @@ Sau khi build thành công, chạy:
 dist\LiemFinance.exe
 ```
 
+### Cách 3 (Khuyên dùng): Download bản Portable app tại "https://github.com/MinhquanLuong2137/LiemFinance/releases"
+
 Ứng dụng sẽ tự mở trình duyệt. File `expenses.json` được đọc/ghi cạnh
 `LiemFinance.exe`. Các tùy chọn `--port` và `--no-browser` cũng có thể truyền
 vào file `.exe`, ví dụ:
